@@ -49,6 +49,6 @@ public class ViewerActivity extends AppCompatActivity {
 
     private void capNhatChiSo(int viTri) {
         // Cập nhật text hiển thị dạng "1 / 8", "2 / 8",...
-        tvChiSo.setText(getString(R.string.chi_so, viTri + 1, MainActivity.ANH.length));
+        tvChiSo.setText(getString(R.string.chi_so, viTri + 1, MainActivity.ANH.size()));
     }
 }

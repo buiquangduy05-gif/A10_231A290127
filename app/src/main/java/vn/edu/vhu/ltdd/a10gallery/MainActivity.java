@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,10 +20,19 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "A10_231A290127";
     public static final String EXTRA_VI_TRI = "extra_vi_tri";
 
-    public static final int[] ANH = {
-            R.drawable.anh1, R.drawable.anh2, R.drawable.anh3, R.drawable.anh4,
-            R.drawable.anh5, R.drawable.anh6, R.drawable.anh7, R.drawable.anh8
-    };
+    // NC4: Sử dụng ArrayList động thay cho mảng tĩnh int[] để hỗ trợ xóa phần tử
+    public static final ArrayList<Integer> ANH = new ArrayList<>();
+
+    static {
+        ANH.add(R.drawable.anh1);
+        ANH.add(R.drawable.anh2);
+        ANH.add(R.drawable.anh3);
+        ANH.add(R.drawable.anh4);
+        ANH.add(R.drawable.anh5);
+        ANH.add(R.drawable.anh6);
+        ANH.add(R.drawable.anh7);
+        ANH.add(R.drawable.anh8);
+    }
 
     private final List<String> chuThich = new ArrayList<>();
     private AnhAdapter adapter;
@@ -38,24 +48,45 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        for (int i = 0; i < ANH.length; i++) {
-            chuThich.add(getString(R.string.anh_so, i + 1));
-        }
+        khoiTaoChuThich();
 
         RecyclerView rv = findViewById(R.id.rvAnh);
-        // NC2: Sử dụng StaggeredGridLayoutManager cho lưới ảnh so le (Pinterest style)
+        // NC2: Lưới so le StaggeredGridLayoutManager
         rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rv.setHasFixedSize(true);
 
-        adapter = new AnhAdapter(ANH, chuThich, viTri -> {
-            Log.d(TAG, "Mở ảnh lớn tại vị trí " + viTri);
-            Intent i = new Intent(this, ViewerActivity.class);
-            i.putExtra(EXTRA_VI_TRI, viTri);
-            startActivity(i);
-        });
+        adapter = new AnhAdapter(
+                ANH,
+                chuThich,
+                viTri -> {
+                    Log.d(TAG, "Mở ảnh lớn tại vị trí " + viTri);
+                    Intent i = new Intent(this, ViewerActivity.class);
+                    i.putExtra(EXTRA_VI_TRI, viTri);
+                    startActivity(i);
+                },
+                viTri -> {
+                    // NC4: Hiển thị dialog xác nhận xóa ảnh
+                    new AlertDialog.Builder(this)
+                            .setTitle("Xác nhận xóa")
+                            .setMessage("Bạn có chắc muốn xóa ảnh tại vị trí " + (viTri + 1) + " không?")
+                            .setPositiveButton("Xóa", (dialog, which) -> {
+                                adapter.xoaPhanTu(viTri);
+                                Toast.makeText(this, "Đã xóa ảnh thành công!", Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton("Hủy", null)
+                            .show();
+                }
+        );
         rv.setAdapter(adapter);
 
         findViewById(R.id.btnDoiCot).setOnClickListener(v -> doiSoCot(rv));
+    }
+
+    private void khoiTaoChuThich() {
+        chuThich.clear();
+        for (int i = 0; i < ANH.size(); i++) {
+            chuThich.add(getString(R.string.anh_so, i + 1));
+        }
     }
 
     private void doiSoCot(RecyclerView rv) {
