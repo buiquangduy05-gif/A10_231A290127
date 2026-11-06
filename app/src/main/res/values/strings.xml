@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">A10_231A290127</string>
+    <string name="title">Lab A10 – Album ảnh</string>
+    <string name="huong_dan">Chạm vào một ảnh để xem lớn, rồi vuốt ngang để chuyển ảnh.</string>
+    <string name="doi_cot">Đổi số cột</string>
+    <string name="desc_anh">Ảnh trong album</string>
+    <string name="anh_so">Ảnh %1$d</string>
+    <string name="so_cot">Đang hiển thị %1$d cột</string>
+    <string name="chi_so">%1$d / %2$d</string>
+</resources>
