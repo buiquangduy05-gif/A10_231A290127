@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         RecyclerView rv = findViewById(R.id.rvAnh);
-        rv.setLayoutManager(new GridLayoutManager(this, 3));
+        // NC2: Sử dụng StaggeredGridLayoutManager cho lưới ảnh so le (Pinterest style)
+        rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rv.setHasFixedSize(true);
 
         adapter = new AnhAdapter(ANH, chuThich, viTri -> {
@@ -58,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doiSoCot(RecyclerView rv) {
-        GridLayoutManager lm = (GridLayoutManager) rv.getLayoutManager();
-        if (lm == null) return;
-        int soCot = lm.getSpanCount() + 1;
-        if (soCot > 4) soCot = 2;
-        lm.setSpanCount(soCot);
-        adapter.notifyDataSetChanged();
-        Toast.makeText(this, getString(R.string.so_cot, soCot), Toast.LENGTH_SHORT).show();
+        if (rv.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            StaggeredGridLayoutManager lm = (StaggeredGridLayoutManager) rv.getLayoutManager();
+            int soCot = lm.getSpanCount() + 1;
+            if (soCot > 4) soCot = 2;
+            lm.setSpanCount(soCot);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(this, getString(R.string.so_cot, soCot), Toast.LENGTH_SHORT).show();
+        }
     }
 }

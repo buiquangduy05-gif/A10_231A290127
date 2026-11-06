@@ -16,13 +16,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- ImageView: Hiển thị hình ảnh -->
+        <!-- ImageView: Hiển thị hình ảnh (NC2: wrap_content + adjustViewBounds để ảnh có chiều cao tự nhiên so le kiểu Pinterest) -->
         <ImageView
             android:id="@+id/imgAnh"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/desc_anh"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter" />
 
         <!-- TextView: Hiển thị chú thích bên dưới ảnh -->
         <TextView
